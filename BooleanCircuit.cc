@@ -34,7 +34,7 @@ Boolean_Circuit::Boolean_Circuit(std::string filename){
             std::vector<unsigned> fanIns;
             unsigned i;
             while(!is.eof()){
-                is<<i;
+                is>>i;
                 fanIns.push_back(i);
             }
             addNode(id, type, fanIns);
@@ -57,8 +57,8 @@ void Boolean_Circuit::addNode(unsigned id, NodeType type, std::vector<unsigned> 
     Node *newNode = new Node(id, type);
     for(size_t i = 0; i<fanIn.size(); i++){
         if(i>=id) throw std::invalid_argument("Incorrect Inputs6");
-        newNode->addFanIn(nodeList[i]);
-        nodeList[i]->addFanOut(newNode);
+        newNode->addFanIn(nodeList[fanIn[i]]);
+        nodeList[fanIn[i]]->addFanOut(newNode);
     }
     nodeList.push_back(newNode);
 
@@ -99,32 +99,40 @@ void Node::printNode(){
     std::cout<< "" << std::endl;
 }
 
-/*bool Boolean_Circuit::evaluate(Node node){ //if statuses rewrite so failed incoming set outgoing status to false
-    if (!node) return 0;
-    else if (node.type == NodeType::AND){
-        for (int i=0; i<node.incoming.size(); i++){
-            if(!node.incoming[i].status??) return 0; //relies on incoming returning bools
-        }
-        return 1;
-    }
-
-    else if(node.type == NodeType::OR){
-       for (int i=0; i<node.incoming.size(); i++){
-            if(node.incoming[i].status??) return 1; //relies on incoming returning bools
-        }
-        return 0;
-    }
-
-    else if (node.type == NodeType::NOT){
-        //only ideas for this function rely on statuses
-    }
-}*/
 
 bool Boolean_Circuit::simulate(std::vector<bool> inputs){
     std::unordered_map<unsigned, bool> mymap;
-    //too many questions still, feel need to implement node flags non-satisfy
-    //stack and queue flags. will need to work more closely on implementation
-    return false;
+    for (size_t i=0; i<nodeList.size(); i++){
+        bool status;
+        if (nodeList[i]->getType() == NodeType::AND){
+            for(size_t j=0; j<nodeList[i]->getFanInVector().size(); j++){
+                unsigned queryID = nodeList[i]->getFanIn(j)->getId();
+                if(mymap.queryID.status = false) status = false;
+                else status = true;
+            }
+        }
+
+        else if (nodeList[i]->getType() == NodeType::OR){
+            for(size_t j=0; j<nodeList[i]->getFanInVector().size(); j++){
+                unsigned queryID = nodeList[i]->getFanIn(j)->getId();
+                if(mymap.queryID.status = true) status = true;
+                else status = false;
+            }
+        }
+
+        else if (nodeList[i]->getType() == NodeType::NOT){
+            unsigned queryID = nodeList[i]->getFanIn[0]->getId();
+            if(mymap.queryID.status = true) status = false;
+            else status = true;
+        }
+        else{
+            status = inputs[i];
+        }
+        mymap.Key = nodeList[i]->getId();
+        mymap.Value = status;
+     }
+
+    return mymap.(nodeList.size()-1).status;
 }
 
 
@@ -134,4 +142,28 @@ void Node::addFanIn(Node * soloFan){
 
 void Node::addFanOut(Node * soloFan){
     fanOut.push_back(soloFan);
+}
+
+NodeType Node::getType(){
+    return type;
+}
+
+unsigned Node::getId(){
+    return id;
+}
+
+Node* Node::getFanIn(size_t i){
+    return fanIn[i];
+}
+
+Node* Node::getFanOut(size_t i){
+    return fanOut[i];
+}
+
+std::vector<Node *> Node::getFanInVector(){
+    return fanIn;
+}
+
+std::vector<Node *> Node::getFanOutVector(){
+    return fanOut;
 }

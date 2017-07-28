@@ -10,8 +10,14 @@ public:
     Node(unsigned id ,NodeType type);
     void addFanIn(Node * node);
     void addFanOut(Node * node);
+    NodeType getType();
+    unsigned getId();
+    Node* getFanIn(size_t i);
+    Node* getFanOut(size_t i);
+    std::vector<Node *> getFanInVector();
+    std::vector<Node *> getFanOutVector();
     void printNode();
-
+    bool evaluate();
 private:
     //bool flag;
     NodeType type;
@@ -26,17 +32,14 @@ public:
     Boolean_Circuit(std::string filename);
     ~Boolean_Circuit();
     void addNode( unsigned id, NodeType type, std::vector<unsigned> fanIn);
-    //bool satisfy();
     bool simulate(std::vector<bool> inputs);
-    int randomSuccessCount();
     int countLogicalNodes();
     void printCircuit();
 
 protected:
 
 private:
-    bool evaluate(Node * node);
     std::vector<Node *> nodeList;
-    std::string toString();//loop through nodelist
+    std::unordered_map<unsigned, bool> mymap;
 };
 #endif // BOOLEAN_CIRCUIT_HH_
