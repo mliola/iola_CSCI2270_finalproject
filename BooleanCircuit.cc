@@ -102,37 +102,39 @@ void Node::printNode(){
 
 bool Boolean_Circuit::simulate(std::vector<bool> inputs){
     std::unordered_map<unsigned, bool> mymap;
+    size_t q = 0;
+    while(q<nodeList.size() && nodeList[q]->getType()== NodeType::PI){
+        mymap[q] = inputs[q];
+        q++;
+    }
+
     for (size_t i=0; i<nodeList.size(); i++){
         bool status;
         if (nodeList[i]->getType() == NodeType::AND){
             for(size_t j=0; j<nodeList[i]->getFanInVector().size(); j++){
-                unsigned queryID = nodeList[i]->getFanIn(j)->getId();
-                if(mymap.queryID.status = false) status = false;
-                else status = true;
+                if(mymap[j] == false) status = false;
             }
+            status = true;
         }
 
         else if (nodeList[i]->getType() == NodeType::OR){
             for(size_t j=0; j<nodeList[i]->getFanInVector().size(); j++){
-                unsigned queryID = nodeList[i]->getFanIn(j)->getId();
-                if(mymap.queryID.status = true) status = true;
-                else status = false;
+                if(mymap[j] == true) status = true;
             }
+            status = false;
         }
 
         else if (nodeList[i]->getType() == NodeType::NOT){
-            unsigned queryID = nodeList[i]->getFanIn[0]->getId();
-            if(mymap.queryID.status = true) status = false;
+            if(mymap[nodeList[i]->getFanIn(0)->getId()] == true) status = false;
             else status = true;
         }
         else{
-            status = inputs[i];
+            status = mymap[nodeList[i]->getId()];
         }
-        mymap.Key = nodeList[i]->getId();
-        mymap.Value = status;
+        mymap[i] = status;
      }
 
-    return mymap.(nodeList.size()-1).status;
+    return mymap[nodeList.size()-1];
 }
 
 

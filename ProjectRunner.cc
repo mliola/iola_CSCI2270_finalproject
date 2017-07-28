@@ -22,6 +22,7 @@ int main(int argc, char *argv[]){
        circuit.addNode(7, NodeType::OR, {2,3});
        circuit.addNode(8, NodeType::AND, {4,5,6,7});
        circuit.printCircuit();
+       std::cout<<circuit.simulate({0,1})<<std::endl;
 
    }
     return 0;

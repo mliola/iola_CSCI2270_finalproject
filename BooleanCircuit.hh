@@ -40,6 +40,5 @@ protected:
 
 private:
     std::vector<Node *> nodeList;
-    std::unordered_map<unsigned, bool> mymap;
 };
 #endif // BOOLEAN_CIRCUIT_HH_
